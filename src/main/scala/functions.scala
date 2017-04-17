@@ -16,9 +16,18 @@ object exercise2 {
 }
 
 object exercise3 {
-  type Parser[A] = String => Either[String, (String, A)]
+  type Error = String
+  type Parser[A] = String => Either[Error, (String, A)]
 
-  def or[A](left: Parser[A], right: Parser[A]): Parser[A] = ???
+  // a different way of looking at polymorphic functions: functions that take types
+  // A : Type => a : A => A
+  // in some programming languages functions can return types
+
+  def or[A](left: Parser[A], right: Parser[A]): Parser[A] = (input: String) =>
+    left(input) match {
+    case Left(_) => right(input)
+    case x => x
+  }
 }
 
 object exercise4 {
